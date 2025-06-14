@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Production Cost Calculator</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #faf4f5;
+        }
+        
+        css Copy Edit header {
+            background-color: #3b141c;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            font-family: 'Miniver', cursive;
+        }
+        
+        nav {
+            background-color: #252525;
+            padding: 10px 0;
+            text-align: center;
+        }
+        
+        .navbar {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 0;
+        }
+        
+        .navbar li a {
+            text-decoration: none;
+            color: white;
+            background-color: #b1362e;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        
+        .navbar li a:hover,
+        .navbar li a.active {
+            background-color: #e74c3c;
+        }
+        
+        section {
+            padding: 40px;
+            margin: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: #3b141c;
+        }
+        
+        form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        form input,
+        form select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        form input[type="button"] {
+            margin-top: 20px;
+            background-color: #3b141c;
+            color: white;
+            cursor: pointer;
+        }
+        
+        table {
+            width: 50%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <header>Smart Production Cost Calculator</header>
+    <nav>
+        <ul class="navbar">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#materials">Materials</a></li>
+            <li><a href="#labours">Labours</a></li>
+            <li><a href="#overheads">Overheads</a></li>
+            <li><a href="#misc">Miscellaneous</a></li>
+        </ul>
+    </nav>
+    <section id="home">
+        <h2>Home</h2>
+        <p>Welcome to Smart Production Cost Calculator. Calculate raw material, labour, and overheads easily.</p>
+    </section>
+    <section id="about">
+        <h2>About</h2>
+        <p>This app helps you calculate total production costs by entering various parameters.</p>
+    </section>
+    <section id="materials">
+        <h2>Raw Material Calculator</h2>
+        <form> <label>Select Material:</label> <select id="itemSelect" onchange="updateItemDetails()"> <option value="">-- Select Material --</option> <option value="Iron">Iron (₹50)</option> <option value="Copper">Copper (₹120)</option> <option value="Aluminum">Aluminum (₹80)</option> <option value="Plastic">Plastic (₹30)</option> <option value="Steel">Steel (₹100)</option> </select>            php-template Copy Edit
+            <label>Name:</label>
+            <input type="text" id="name" readonly>
+
+            <label>Quantity:</label>
+            <input type="number" id="quantity">
+
+            <label>Unit Cost (₹):</label>
+            <input type="number" id="unitCost" readonly>
+
+            <input type="button" value="Calculate Raw Material Cost" onclick="calculateTotal()">
+            <p id="materialResult"></p>
+        </form>
+
+        <h3>Material Price List</h3>
+        <table>
+            <tr>
+                <th>Material</th>
+                <th>Unit Cost (₹)</th>
+            </tr>
+            <tr>
+                <td>Iron</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Copper</td>
+                <td>120</td>
+            </tr>
+            <tr>
+                <td>Aluminum</td>
+                <td>80</td>
+            </tr>
+            <tr>
+                <td>Plastic</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>Steel</td>
+                <td>100</td>
+            </tr>
+        </table>
+    </section>
+    <section id="labours">
+        <h2>Labour Cost Calculator</h2>
+        <form> <label>Hours Worked:</label> <input type="number" id="hoursWorked"> <label>Rate per Hour:</label> <input type="number" id="ratePerHour"> <input type="button" value="Calculate Labour Cost" onclick="calculateLabour()">
+            <p id="labourResult"></p>
+        </form>
+    </section>
+    <section id="overheads">
+        <h2>Overheads Calculator</h2>
+        <form> <label>Electricity:</label> <input type="number" id="electricity"> <label>Rent:</label> <input type="number" id="rent"> <label>Other:</label> <input type="number" id="other"> <input type="button" value="Calculate Overheads" onclick="calculateOverheads()">
+            <p id="overheadsResult"></p>
+        </form>
+    </section>
+    <section id="misc">
+        <h2>Miscellaneous</h2>
+        <p>You can extend this section for additional costs like packaging, transportation, etc.</p>
+    </section>
+    <script>
+        const items = {
+            "Iron": 50,
+            "Copper": 120,
+            "Aluminum": 80,
+            "Plastic": 30,
+            "Steel": 100
+        };
+
+        function updateItemDetails() {
+            const selectedItem = document.getElementById("itemSelect").value;
+            if (selectedItem && items[selectedItem]) {
+                document.getElementById("name").value = selectedItem;
+                document.getElementById("unitCost").value = items[selectedItem];
+            } else {
+                document.getElementById("name").value = "";
+                document.getElementById("unitCost").value = "";
+            }
+        }
+
+        function calculateTotal() {
+            const name = document.getElementById("name").value;
+            const quantity = parseFloat(document.getElementById("quantity").value);
+            const unitCost = parseFloat(document.getElementById("unitCost").value);
+            if (!name || isNaN(quantity) || isNaN(unitCost)) {
+                document.getElementById("materialResult").innerText = "Please select a material and enter a valid quantity.";
+                return;
+            }
+            const totalCost = quantity * unitCost;
+            document.getElementById("materialResult").innerText = `Total cost of ${quantity} units of ${name} at ₹${unitCost} each is ₹${totalCost.toFixed(2)}.`;
+        }
+
+        function calculateLabour() {
+            const hours = parseFloat(document.getElementById("hoursWorked").value);
+            const rate = parseFloat(document.getElementById("ratePerHour").value);
+            if (isNaN(hours) || isNaN(rate)) {
+                document.getElementById("labourResult").innerText = "Enter valid hours and rate.";
+                return;
+            }
+            const total = hours * rate;
+            document.getElementById("labourResult").innerText = `Labour Cost: ₹${total.toFixed(2)}`;
+        }
+
+        function calculateOverheads() {
+            const electricity = parseFloat(document.getElementById("electricity").value) || 0;
+            const rent = parseFloat(document.getElementById("rent").value) || 0;
+            const other = parseFloat(document.getElementById("other").value) || 0;
+            const total = electricity + rent + other;
+            document.getElementById("overheadsResult").innerText = `Total Overheads: ₹${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+
+</html>
